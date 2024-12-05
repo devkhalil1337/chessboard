@@ -84,73 +84,66 @@
         </div>
 
         <script>
-            fetch("players.json")
-                .then(response => response.json())
-                .then(data => {
-                    data.players_C.forEach(player => {
-                        let row = `<tr class='player'>
-                                        <td>${player.name}</td>
-                                        <td>${player.rating}</td>
-                                    </tr>`;
-                        document.querySelector("#userdataC tbody").innerHTML += row;
-                    });
+            document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.querySelector('#btn');
+    const sb = document.querySelector('#type');
+    const tables = document.querySelectorAll('.profile');
 
-                    data.players_R.forEach(player => {
-                        let row = `<tr class='player'>
-                                        <td>${player.name}</td>
-                                        <td>${player.rating}</td>
-                                    </tr>`;
-                        document.querySelector("#userdataR tbody").innerHTML += row;
-                    });
-
-                    data.players_B.forEach(player => {
-                        let row = `<tr class='player'>
-                                        <td>${player.name}</td>
-                                        <td>${player.rating}</td>
-                                    </tr>`;
-                        document.querySelector("#userdataB tbody").innerHTML += row;
-                    });
-                });
-
-            const btn = document.querySelector('#btn');
-            const sb = document.querySelector('#type');
-            const tables = document.querySelectorAll('.profile');
-            const searchBtn = document.querySelector('#searchBtn');
-            const searchInput = document.querySelector('#search');
-
-            btn.onclick = (event) => {
-                event.preventDefault();
-                const selectedValue = sb.value;
-                tables.forEach(table => {
-                    table.style.display = 'none';
-                });
-                const selectedTable = document.getElementById(selectedValue);
-                if (selectedTable) {
-                    selectedTable.style.display = 'block';
-                }
-            };
-
-            searchBtn.onclick = (event) => {
-                event.preventDefault();
-                const searchTerm = searchInput.value.toLowerCase();
-                let found = false;
-
-                const players = document.querySelectorAll('.player');
-                players.forEach(player => {
-                    player.style.backgroundColor = '';
-                });
-
-                players.forEach(player => {
-                    if (player.textContent.toLowerCase().includes(searchTerm) && searchTerm) {
-                        player.style.backgroundColor = 'yellow';
-                        found = true;
+    btn.onclick = (event) => {
+        event.preventDefault();
+        const selectedValue = sb.value;
+        tables.forEach(table => {
+            table.style.display = 'none';
+        });
+        const selectedTable = document.getElementById(selectedValue);
+        if (selectedValue && selectedTable) {
+            fetch(`/api/players/${selectedValue}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch players.');
                     }
+                    return response.json();
+                })
+                .then(players => {
+                    selectedTable.style.display = 'block';
+                    const tbody = selectedTable.querySelector('tbody');
+                    tbody.innerHTML = ''; // Clear previous entries
+                    players.forEach(player => {
+                        const row = `<tr class='player'>
+                                        <td>${player.name}</td>
+                                        <td>${player.rating}</td>
+                                     </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Error fetching players.');
                 });
+        }
+    };
+});
 
-                if (!found) {
-                    alert('Player not found.');
-                }
-            };
+
+document.querySelector('#searchBtn').onclick = (event) => {
+    event.preventDefault();
+    const searchTerm = document.querySelector('#search').value.toLowerCase();
+    let found = false;
+
+    const players = document.querySelectorAll('.player');
+    players.forEach(player => {
+        player.style.backgroundColor = '';
+        if (player.textContent.toLowerCase().includes(searchTerm) && searchTerm) {
+            player.style.backgroundColor = 'yellow';
+            found = true;
+        }
+    });
+
+    if (!found) {
+        alert('Player not found.');
+    }
+};
+
         </script>
     </main>
 
