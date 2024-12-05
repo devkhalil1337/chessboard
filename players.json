@@ -1,0 +1,41 @@
+{
+    "players_C": [
+      { "name": "Magnus Carlsen", "rating": 2300, "rank": 1, "type": "classical" },
+      { "name": "Hikaru Nakamura", "rating": 2300, "rank": 2, "type": "classical" },
+      { "name": "Arjun Erigaisi", "rating": 2300, "rank": 3, "type": "classical" },
+      { "name": "Fabiano Caruana", "rating": 2300, "rank": 4, "type": "classical" },
+      { "name": "Gukesh Dommaraju", "rating": 2300, "rank": 5, "type": "classical" },
+      { "name": "Nodirbek Abdusattorov", "rating": 2300, "rank": 6, "type": "classical" },
+      { "name": "Alireza Firouzja", "rating": 2300, "rank": 7, "type": "classical" },
+      { "name": "Wei Yi", "rating": 2300, "rank": 8, "type": "classical" },
+      { "name": "Ian Nepomniachtchi", "rating": 2300, "rank": 9, "type": "classical" },
+      { "name": "CHECK THIS FOR CLASSICAL", "rating": 2300, "rank": 10, "type": "classical" }
+    ],
+    
+    "players_R": [
+      { "name": "Magnus Carlsen", "rating": 2300, "rank": 1, "type": "rapid" },
+      { "name": "Hikaru Nakamura", "rating": 2300, "rank": 2, "type": "rapid" },
+      { "name": "Arjun Erigaisi", "rating": 2300, "rank": 3, "type": "rapid" },
+      { "name": "Fabiano Caruana", "rating": 2300, "rank": 4, "type": "rapid" },
+      { "name": "Gukesh Dommaraju", "rating": 2300, "rank": 5, "type": "rapid" },
+      { "name": "Nodirbek Abdusattorov", "rating": 2300, "rank": 6, "type": "rapid" },
+      { "name": "Alireza Firouzja", "rating": 2300, "rank": 7, "type": "rapid" },
+      { "name": "Wei Yi", "rating": 2300, "rank": 8, "type": "rapid" },
+      { "name": "Ian Nepomniachtchi", "rating": 2300, "rank": 9, "type": "rapid" },
+      { "name": "CHECK THIS FOR RAPID", "rating": 2300, "rank": 10, "type": "rapid" }
+    ],
+  
+    "players_B": [
+      { "name": "Magnus Carlsen", "rating": 2300, "rank": 1, "type": "Blitz" },
+      { "name": "Hikaru Nakamura", "rating": 2300, "rank": 2, "type": "Blitz" },
+      { "name": "Arjun Erigaisi", "rating": 2300, "rank": 3, "type": "Blitz" },
+      { "name": "Fabiano Caruana", "rating": 2300, "rank": 4, "type": "Blitz" },
+      { "name": "Gukesh Dommaraju", "rating": 2300, "rank": 5, "type": "Blitz" },
+      { "name": "Nodirbek Abdusattorov", "rating": 2300, "rank": 6, "type": "Blitz" },
+      { "name": "Alireza Firouzja", "rating": 2300, "rank": 7, "type": "Blitz" },
+      { "name": "Wei Yi", "rating": 2300, "rank": 8, "type": "Blitz" },
+      { "name": "Ian Nepomniachtchi", "rating": 2300, "rank": 9, "type": "Blitz" },
+      { "name": "CHECK THIS FOR BLITZ", "rating": 2300, "rank": 10, "type": "Blitz" }
+    ]
+  }
+  

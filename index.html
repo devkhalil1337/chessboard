@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiesty.com</title>
+    <link rel="stylesheet" href="clean.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Welcome to Shiesty.com</h1>
+        <nav>
+            <ul>
+                <li><a href="http://127.0.0.1:5501/leaderboard.html">Leaderboard</a></li>
+                <li><a href="http://127.0.0.1:5501/game_upload_analysis.html">Game Upload/Game Analysis</a></li>
+                <li><a href="http://127.0.0.1:5501/Practice.html">Training/Practice Mode</a></li>
+                <li><a href="http://127.0.0.1:5501/history.html">Chess History</a></li>
+                <li><a href="http://127.0.0.1:5501/index.html">Main page</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <p>Click the links above to navigate to different sections of the website.</p>
+
+        <h2>Explore Our Features</h2>
+
+        <!-- Chessboard and PGN Submission -->
+        <section>
+            <h3>Replay Chess Games</h3>
+            <p>Submit a PGN game below and watch it replayed on the board.</p>
+            <textarea id="pgnInput" rows="5" cols="50" placeholder="Enter PGN moves here..."></textarea>
+            <br>
+            <button id="submitPGN">Submit PGN</button>
+            <button id="processMoveButton">Next Move</button>
+        </section>
+
+        <!-- Chessboard -->
+        <section id="chessboard-container">
+            <h3>Chessboard</h3>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Shiesty.com. All rights reserved. (my shit)</p>
+    </footer>
+
+    <script>
+        const piecePosition = {
+            a2: "Wpawn", b2: "Wpawn", c2: "Wpawn", d2: "Wpawn", e2: "Wpawn", f2: "Wpawn", g2: "Wpawn", h2: "Wpawn",
+            a7: "Bpawn", b7: "Bpawn", c7: "Bpawn", d7: "Bpawn", e7: "Bpawn", f7: "Bpawn", g7: "Bpawn", h7: "Bpawn",
+            a1: "Wrook", b1: "Wknight", c1: "Wbishop", d1: "Wqueen", e1: "Wking", f1: "Wbishop", g1: "Wknight", h1: "Wrook",
+            a8: "Brook", b8: "Bknight", c8: "Bbishop", d8: "Bqueen", e8: "Bking", f8: "Bbishop", g8: "Bknight", h8: "Brook"
+        };
+
+        let parsedMoves = [];
+
+        // Parse PGN moves from user input
+        function parsePGNFromInput() {
+            const pgnInput = document.getElementById("pgnInput").value;
+            const pgnMoves = pgnInput.split("\n"); // Split by line breaks
+            const moves = [];
+
+            pgnMoves.forEach((line) => {
+                const match = line.match(/\d+\.\s*([^\s]+)\s*([^\s]+)/);
+                if (match) {
+                    const [, whiteMove, blackMove] = match;
+                    moves.push({ color: "white", notation: whiteMove });
+                    moves.push({ color: "black", notation: blackMove });
+                }
+            });
+
+            return moves;
+        }
+
+        // Decode PGN move
+        function decodeMove(move) {
+            if (move === "O-O") return { piece: "king", special: "kingside_castling" };
+            if (move === "O-O-O") return { piece: "king", special: "queenside_castling" };
+
+            const match = move.match(/([KQRBN])?([a-h]?[1-8]?)?x?([a-h][1-8])=?([QRBN])?/);
+            if (!match) {
+                console.error(`Invalid move notation: ${move}`);
+                return null;
+            }
+
+            const [, pieceSymbol, disambiguation, targetSquare, promotion] = match;
+            const piece = pieceSymbol
+                ? { K: "king", Q: "queen", R: "rook", B: "bishop", N: "knight" }[pieceSymbol]
+                : "pawn";
+
+            const isCapture = move.includes("x");
+
+            return { piece, disambiguation, targetSquare, promotion, isCapture };
+        }
+
+        // Find the correct piece to move
+        function findPieceToMove(piece, targetSquare, color, disambiguation) {
+            const possiblePieces = Object.entries(piecePosition).filter(([position, pieceType]) => {
+                return pieceType === `${color[0].toUpperCase()}${piece}`;
+            });
+
+            for (const [position] of possiblePieces) {
+                if (isValidMove(piece, position, targetSquare, color)) {
+                    return position;
+                }
+            }
+
+            return null;
+        }
+
+        // Validate movement rules
+        function isValidMove(piece, from, to, color) {
+            const fromFile = from[0];
+            const fromRank = parseInt(from[1], 10);
+            const toFile = to[0];
+            const toRank = parseInt(to[1], 10);
+
+            switch (piece) {
+                case "pawn":
+                    const direction = color === "white" ? 1 : -1;
+                    if (fromFile === toFile && toRank === fromRank + direction) return true;
+                    if (fromFile === toFile && toRank === fromRank + 2 * direction && (fromRank === 2 || fromRank === 7)) return true;
+                    if (Math.abs(fromFile.charCodeAt(0) - toFile.charCodeAt(0)) === 1 && toRank === fromRank + direction) return true;
+                    break;
+                case "knight":
+                    if ((Math.abs(fromFile.charCodeAt(0) - toFile.charCodeAt(0)) === 2 && Math.abs(fromRank - toRank) === 1) ||
+                        (Math.abs(fromFile.charCodeAt(0) - toFile.charCodeAt(0)) === 1 && Math.abs(fromRank - toRank) === 2)) return true;
+                    break;
+                case "bishop":
+                    if (Math.abs(fromFile.charCodeAt(0) - toFile.charCodeAt(0)) === Math.abs(fromRank - toRank)) return true;
+                    break;
+                case "rook":
+                    if (fromFile === toFile || fromRank === toRank) return true;
+                    break;
+                case "queen":
+                    if (fromFile === toFile || fromRank === toRank ||
+                        Math.abs(fromFile.charCodeAt(0) - toFile.charCodeAt(0)) === Math.abs(fromRank - toRank)) return true;
+                    break;
+                case "king":
+                    if (Math.abs(fromFile.charCodeAt(0) - toFile.charCodeAt(0)) <= 1 && Math.abs(fromRank - toRank) <= 1) return true;
+                    break;
+            }
+
+            return false;
+        }
+
+        // Move piece on the board
+        function movePiece(from, to) {
+            const fromCell = document.querySelector(`[data-position="${from}"]`);
+            const toCell = document.querySelector(`[data-position="${to}"]`);
+
+            if (fromCell && toCell) {
+                const img = fromCell.querySelector("img");
+
+                if (img) {
+                    toCell.appendChild(img);
+                    fromCell.innerHTML = "";
+                    piecePosition[to] = piecePosition[from];
+                    delete piecePosition[from];
+                }
+            }
+        }
+
+        // Process the next move
+        function processNextMove() {
+            if (parsedMoves.length === 0) {
+                console.log("No more moves to process.");
+                return;
+            }
+
+            const { color, notation } = parsedMoves.shift();
+            const { piece, targetSquare, disambiguation, isCapture } = decodeMove(notation);
+
+            const from = findPieceToMove(piece, targetSquare, color, disambiguation);
+            if (from) {
+                movePiece(from, targetSquare);
+                console.log(`${color} ${piece} moved from ${from} to ${targetSquare}`);
+            } else {
+                console.error(`Move ${notation} is invalid.`);
+            }
+        }
+
+        // Initialize the board
+        function setupBoard() {
+            const chessTable = document.createElement("table");
+
+            for (let i = 0; i < 8; i++) {
+                const tr = document.createElement("tr");
+                for (let j = 0; j < 8; j++) {
+                    const td = document.createElement("td");
+                    td.dataset.position = `${String.fromCharCode(97 + j)}${8 - i}`;
+                    td.style.backgroundColor = (i + j) % 2 === 0 ? "white" : "black";
+                    td.style.width = "50px";
+                    td.style.height = "50px";
+                    td.style.textAlign = "center";
+                    td.style.border = "1px solid gray";
+
+                    tr.appendChild(td);
+                }
+                chessTable.appendChild(tr);
+            }
+
+            document.getElementById("chessboard-container").appendChild(chessTable);
+        }
+
+        function initializePieces() {
+            Object.entries(piecePosition).forEach(([position, piece]) => {
+                const cell = document.querySelector(`[data-position="${position}"]`);
+                if (cell) {
+                    const img = document.createElement("img");
+                    img.src = `photo/${piece}.png`;
+                    img.style.width = "45px";
+                    img.style.height = "45px";
+                    cell.appendChild(img);
+                }
+            });
+        }
+
+        // Initialize everything
+        setupBoard();
+        initializePieces();
+
+        document.getElementById("submitPGN").addEventListener("click", () => {
+            parsedMoves = parsePGNFromInput();
+            if (parsedMoves.length === 0) {
+                console.error("No valid moves found. Please check your input.");
+            } else {
+                console.log("PGN parsed successfully. Ready to play.");
+            }
+        });
+
+        document.getElementById("processMoveButton").addEventListener("click", processNextMove);
+    </script>
+</body>
+
+</html>

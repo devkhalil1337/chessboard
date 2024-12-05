@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiesty.com</title>
+    <link rel="stylesheet" href="clean.css"> 
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <header>
+        <h1><b>Leaderboard for the Top 100 in Classical, Rapid, and Blitz</b></h1>
+        <h1>Welcome to Shiesty.com</h1>
+        <nav>
+            <ul>
+                <li><a href="http://127.0.0.1:5501/leaderboard.html">Leaderboard</a></li>
+                <li><a href="http://127.0.0.1:5501/game_upload_analysis.html">Game Upload/Game Analysis</a></li>
+                <li><a href="http://127.0.0.1:5501/Practice.html">Training/Practice Mode</a></li>
+                <li><a href="http://127.0.0.1:5501/history.html">Chess History</a></li>
+                <li><a href="http://127.0.0.1:5501/index.html">Main page</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="search-container">
+            <form id="searchForm" action="players.json" method="get">
+                <label for="search">Search Leaderboard:</label>
+                <input type="text" id="search" name="search" placeholder="Enter player name" required pattern="[A-Za-z\s]+" title="Only letters and spaces allowed">
+                <button id="searchBtn" type="submit">Search</button>
+            </form>
+        </div>
+    
+        <label for="type">Select Game Format:</label>
+        <select name="type" id="type" required>
+            <option value="">--Select Format--</option>
+            <option value="classical">Classical</option>
+            <option value="rapid">Rapid</option>
+            <option value="blitz">Blitz</option>
+        </select>
+
+        <button id="btn">Select</button>
+
+        <div class="wrapper">
+            <div class="profile" id="classical" style="display:none;">
+                <h2>Classical Players</h2>
+                <table id="userdataC" border="2">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Ranking</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="profile" id="rapid" style="display:none;">
+                <h2>Rapid Players</h2>
+                <table id="userdataR" border="2">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Ranking</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="profile" id="blitz" style="display:none;">
+                <h2>Blitz Players</h2>
+                <table id="userdataB" border="2">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Ranking</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            fetch("players.json")
+                .then(response => response.json())
+                .then(data => {
+                    data.players_C.forEach(player => {
+                        let row = `<tr class='player'>
+                                        <td>${player.name}</td>
+                                        <td>${player.rating}</td>
+                                    </tr>`;
+                        document.querySelector("#userdataC tbody").innerHTML += row;
+                    });
+
+                    data.players_R.forEach(player => {
+                        let row = `<tr class='player'>
+                                        <td>${player.name}</td>
+                                        <td>${player.rating}</td>
+                                    </tr>`;
+                        document.querySelector("#userdataR tbody").innerHTML += row;
+                    });
+
+                    data.players_B.forEach(player => {
+                        let row = `<tr class='player'>
+                                        <td>${player.name}</td>
+                                        <td>${player.rating}</td>
+                                    </tr>`;
+                        document.querySelector("#userdataB tbody").innerHTML += row;
+                    });
+                });
+
+            const btn = document.querySelector('#btn');
+            const sb = document.querySelector('#type');
+            const tables = document.querySelectorAll('.profile'); 
+            const searchBtn = document.querySelector('#searchBtn');
+            const searchInput = document.querySelector('#search');
+
+            btn.onclick = (event) => {
+                event.preventDefault();
+                const selectedValue = sb.value;
+                tables.forEach(table => {
+                    table.style.display = 'none'; 
+                });
+                const selectedTable = document.getElementById(selectedValue);
+                if (selectedTable) {
+                    selectedTable.style.display = 'block'; 
+                }
+            };
+
+            searchBtn.onclick = (event) => {
+                event.preventDefault(); 
+                const searchTerm = searchInput.value.toLowerCase();
+                let found = false;
+
+                const players = document.querySelectorAll('.player');
+                players.forEach(player => {
+                    player.style.backgroundColor = ''; 
+                });
+
+                players.forEach(player => {
+                    if (player.textContent.toLowerCase().includes(searchTerm) && searchTerm) {
+                        player.style.backgroundColor = 'yellow'; 
+                        found = true;
+                    }
+                });
+
+                if (!found) {
+                    alert('Player not found.');
+                }
+            };
+        </script>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Shiesty.com. All rights reserved.</p>
+    </footer>
+</body>
+</html>

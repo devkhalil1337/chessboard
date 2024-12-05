@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shiesty.com</title>
+    <link rel="stylesheet" href="clean.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="GA_script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h3>Welcome to Shiesty.com</h3>
+        <nav>
+            <ul>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="game_upload_analysis.html">Game Upload/Game Analysis</a></li>
+                <li><a href="Practice.html">Training/Practice Mode</a></li>
+                <li><a href="history.html">Chess History</a></li>
+                <li><a href="index.html">Main page</a></li>
+            </ul>
+        </nav>
+
+        <h1>Upload your game and analyze them</h1>
+    </header>
+
+    <main>
+        <form action="some_place_cool" method="get">
+            <label for="playerName">Player Name:</label>
+            <input type="text" id="playerName" name="playerName" required pattern="[A-Za-z\s]+" title="Only letters">
+            
+            <label for="type">Game Format:</label>
+            <select id="type" name="type" required>
+                <option value="">Select Game Format</option>
+                <option value="3">Blitz</option>
+                <option value="2">Rapid</option>
+                <option value="1">Classical</option>
+            </select>
+        
+            <label for="datePlayed">Date Played:</label>
+            <input type="date" id="datePlayed" name="datePlayed" required>
+            
+            <button id="btn" type="submit">Submit</button>
+        </form>
+
+        <p>Please write the script in the PGN format</p>
+
+        <!-- Chessboard and controls -->
+        <div id="chessboard"></div>
+        <textarea id="pgnInput" placeholder="Paste your PGN here"></textarea>
+        <button id="loadPGN">Load PGN</button>
+        <button id="nextMove">Next Move</button>
+        <button id="analyzeAll">Analyze All</button>
+        <div id="analysisOutput"></div>
+        
+        <div class="table-container" id="3">
+            <h2>Blitz Games</h2>
+        </div>
+        <div class="table-container" id="2">
+            <h2>Rapid Games</h2>
+        </div>
+        <div class="table-container" id="1">
+            <h2>Classical Games</h2>
+        </div>
+    </main>
+
+    <footer>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,158 @@
+:root {
+    --primary-color: #003366; 
+    --secondary-color: #fff;
+    --highlight-color: #f0f8ff;
+    --text-color: #fff;
+    --border-color: #ccc;
+    --hover-bg-color: #e0e0e0;
+    --font-size: 16px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: var(--font-size);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--secondary-color);
+}
+
+header {
+    background: var(--primary-color);
+    color: var(--text-color);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+main {
+    background: var(--secondary-color);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    width: 360px;
+    height: 360px;
+    margin: 20px auto;
+    border: 1px solid black;
+}
+
+#chessboard div {
+    width: 100%;
+    height: 100%;
+}
+
+#chessboard div:nth-child(odd) {
+    background-color: #eee;
+}
+
+#chessboard div:nth-child(even) {
+    background-color: #888;
+}
+
+img {
+    display: block;
+    width: 45px;
+    height: 45px;
+    margin: auto;
+}
+
+/* Large Screens */
+@media (min-width: 1025px) {
+    main {
+        grid-template-columns: 1fr 1fr 1fr; 
+    }
+
+    nav ul {
+        justify-content: space-between; 
+    }
+}
+
+/* Medium Screens */
+@media (min-width: 601px) and (max-width: 1024px) {
+    main {
+        grid-template-columns: 1fr 1fr; 
+    }
+    
+    nav ul {
+        justify-content: space-around; 
+    }
+}
+
+/* Small Screens */
+@media (max-width: 600px) {
+    header {
+        padding: 10px;
+    }
+    
+    nav ul {
+        flex-direction: column; 
+    }
+
+    nav ul li {
+        margin: 10px 0;
+    }
+
+    main {
+        grid-template-columns: 1fr; 
+    }
+}
+
+/* Additional Styles */
+button {
+    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555; 
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px 0;
+    background: var(--primary-color);
+    color: var(--text-color);
+}
