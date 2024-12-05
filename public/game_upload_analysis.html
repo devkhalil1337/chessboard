@@ -66,5 +66,39 @@
 
     <footer>
     </footer>
+
+    <script>
+        document.getElementById('analyzeAll').addEventListener('click', () => {
+            const pgnInput = document.getElementById('pgnInput').value;
+    
+            if (!pgnInput.trim()) {
+                alert("Please paste a valid PGN string.");
+                return;
+            }
+    
+            // Send the PGN to the backend
+            fetch('/api/players/updateMoves', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ move: pgnInput })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update moves.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert("All players' moves updated successfully!");
+                })
+                .catch(err => {
+                    console.error('Error updating moves:', err);
+                    alert("An error occurred while updating moves.");
+                });
+        });
+    </script>
+    
 </body>
 </html>

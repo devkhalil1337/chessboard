@@ -49,6 +49,27 @@ app.get('/api/players', async (req, res) => {
     }
 });
 
+
+// Update all players' moves
+app.put('/api/players/updateMoves', async (req, res) => {
+    const { move } = req.body;
+
+    if (!move) {
+        return res.status(400).json({ error: 'Move data is required.' });
+    }
+
+    try {
+        // Update all players
+        await Player.update({ move }, { where: {} });
+
+        res.status(200).json({ message: 'All players updated successfully.' });
+    } catch (error) {
+        console.error('Error updating players:', error);
+        res.status(500).json({ error: 'Failed to update players', details: error.message });
+    }
+});
+
+
 // Get players by type
 app.get('/api/players/:type', async (req, res) => {
     const { type } = req.params;

@@ -18,6 +18,10 @@ const Player = sequelize.define('Player', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    move: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     dateAdded: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
