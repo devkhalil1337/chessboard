@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
-const sequelize = require('./database');
-const Item = require('./Item');
+const sequelize = require('./database/database');
+const Item = require('./model/Item');
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
